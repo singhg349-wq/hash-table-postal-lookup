@@ -1,0 +1,5 @@
+pcode
+testing/test_ht
+testing/test_resize
+testing/test_update
+*.o

@@ -1,0 +1,20 @@
+Edmonton,T5J1A1
+Edmonton,T6G2R3
+Calgary,T2P1J9
+Toronto,M5H2N2
+Edmonton,T5K0L4
+Vancouver,V6B1A1
+Calgary,T3A0E2
+Montreal,H3B4W8
+Winnipeg,R3C0V8
+Toronto,M4W1A8
+Ottawa,K1P5J9
+Halifax,B3J3K5
+Edmonton,T6E5L8
+Regina,S4P3Y2
+Saskatoon,S7K1J5
+Vancouver,V5K0A1
+Red Deer,T4N1X5
+Victoria,V8W1P6
+Quebec City,G1R4P5
+St. John's,A1C5M2

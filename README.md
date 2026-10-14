@@ -1,6 +1,6 @@
-
-
 # Hash Table / Postal Code Lookup
+
+![tests](https://github.com/singhg349-wq/hash-table-postal-lookup/actions/workflows/tests.yml/badge.svg)
 
 A hash table implementation in C using open addressing with linear probing, tombstone deletion, and dynamic resizing — built as a general-purpose key/value store, then used as the engine behind a small postal code lookup tool.
 
@@ -33,13 +33,19 @@ make clean    # removes built binaries
 ./pcode cities.txt
 ```
 
+`cities.txt` is a sample data file with 20 Canadian city/postal-code pairs, included so the tool runs out of the box. You can also pipe input in:
+
+```
+printf 'Edmonton\nCalgary\n' | ./pcode cities.txt
+```
+
 The program loads the file, then reads city names from standard input (one per line) and prints the postal codes on file for each, comma-separated:
 
 ```
 Edmonton
-T5J1A1,T6G2R3,T5K0L4
+T5J1A1,T6G2R3,T5K0L4,T6E5L8
 Calgary
-T2P1J9
+T2P1J9,T3A0E2
 ```
 
 Typing a city with no matches on file just produces no output for that line.
@@ -72,7 +78,7 @@ Three focused test programs live in `testing/`, each targeting one part of the h
 - `test_resize.c` — inserts enough keys to force the table through a resize, then confirms every key is still found afterward
 - `test_update.c` — inserts the same key twice with different values and confirms the value is replaced rather than duplicated
 
-All three pass cleanly under Valgrind with zero leaks and zero errors. See `testing/testing_strategy.txt` for the full write-up of what was tested and why.
+All three pass cleanly under Valgrind with zero leaks and zero errors. GitHub Actions rebuilds the project and runs all three tests, plus `pcode` on the sample file, under Valgrind on every push. See `testing/testing_strategy.txt` for the full write-up of what was tested and why.
 
 ## Design Notes
 
@@ -83,6 +89,10 @@ All three pass cleanly under Valgrind with zero leaks and zero errors. See `test
 - **Duplicate-key insert frees the old value**: `ht_insert` checks for an existing key along the probe chain before falling back to inserting new, and if found, frees the old value before overwriting it with the new one. This keeps a repeated insert of the same key from silently leaking whatever was there before.
 
 - **Separation between the hash table and the application**: `pcode.c` never touches the hash table's internal `struct ht` — it only uses the functions declared in `ht.h`. The city → postal-code mapping problem needed one key to hold *multiple* values, so `pcode.c` solves that on its own side by storing a small linked list (`code_list`) as the hash table's value type, rather than changing the hash table itself to support multi-value keys. This keeps the hash table generic and reusable for anything, not just this one lookup problem.
+
+## License
+
+MIT
 
 ## Author
 
