@@ -1,0 +1,22 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+      - name: Build and run tests
+        run: make testing
+      - name: Run tests under Valgrind
+        run: |
+          for t in test_ht test_resize test_update; do
+            valgrind --error-exitcode=1 --leak-check=full -q ./testing/$t
+          done
+      - name: Run the lookup tool on the sample file
+        run: |
+          printf 'Edmonton\nCalgary\nNowhere\n' | valgrind --error-exitcode=1 --leak-check=full -q ./pcode cities.txt | tee out.txt
+          grep -q "T5J1A1,T6G2R3,T5K0L4,T6E5L8" out.txt
